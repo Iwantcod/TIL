@@ -54,12 +54,71 @@ Statement, PreparedStatement, CallableStatement 구현체를 생성한다.<br>
 
 일반적으로 DML문을 위주로 사용하므로 PreparedStatement를 더 자주 사용한다.
 
+```java
+public int insertBook(int bookid, String bookname, String publisher, int price) {
+Connection con = null;
+PreparedStatement ps = null;
+
+// insert 쿼리문 정의
+String insertSql = "insert into book values(?, ?, ?, ?);";
+int ret = -1;
+try {
+    con = DBManager.getConnection(); // 사용자 정의 커넥션 생성 메서드
+    ps = con.prepareStatement(insertSql); // 쿼리문 선택
+    // 쿼리 파라미터 삽입(파라미터: ?)
+    ps.setInt(1, bookid);
+    ps.setString(2, bookname);
+    ps.setString(3, publisher);
+    ps.setInt(4, price);
+    ret = ps.executeUpdate(); // 쿼리문 실행
+} catch (SQLException e) {
+    e.printStackTrace();
+} finally {
+    // 사용 자원 해제
+    DBManager.releaseConnection(ps, con);
+}
+return ret;
+}
+```
+
 ### CallableStatement
 DB에 저장되어 있는 프로시저나 함수를 호출할 때 사용된다.
 
 ### ResultSet
 DB에서 가져온 데이터(select)를 읽을 때 사용한다.<br>
 ResultSet의 데이터를 DTO 객체의 필드에 매핑하여 조회 결과를 활용한다.
+
+```java
+public List<BookDto> getAllBook() {
+Connection con = null;
+PreparedStatement ps = null;
+ResultSet rs = null;
+// 결과를 받아올 DTO 혹은 DTO 리스트 생성
+List<BookDto> list = new ArrayList<BookDto>();
+String selectSql = "select * from book;"; // select문 정의
+try {
+    con = DBManager.getConnection(); // 사용자 정의 커넥션 생성 메서드
+    ps = con.prepareStatement(selectSql);
+    rs = ps.executeQuery(); // 쿼리문 실행 결과를 ResultSet에 저장
+    while(rs.next()) { // ResultSet으로 결과 릴레이션을 행 단위로 Read
+        BookDto dto = new BookDto();
+        // dto의 필드를 ResultSet의 필드와 매핑
+        dto.setBookid(rs.getInt("bookid"));
+        dto.setBookname(rs.getString("bookname"));
+        dto.setPublisher(rs.getString("publisher"));
+        dto.setPrice(rs.getInt("price"));
+        list.add(dto);
+        System.out.println(dto.toString());
+    }
+} catch (SQLException e) {
+    e.printStackTrace();
+} finally {
+    // 사용 자원 해제
+    DBManager.releaseConnection(rs, ps, con);
+}
+return list;
+}
+```
 
 
 ### 주의사항

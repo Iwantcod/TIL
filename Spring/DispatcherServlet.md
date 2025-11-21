@@ -3,7 +3,7 @@
 스프링 MVC에서는 HTTP 요청을 처리하기 위해 여러 개의 Servlet 클래스를 등록하는 것 대신, 하나의 'DispatcherServlet'을 사용한다.<br>
 
 ## SingleTon
-DispatcherServlet은 서버 내에서 하나의 인스턴스만 존재하고, 이 **하나의 인스턴스가 모든 요청**을 받는다.<br>
+DispatcherServlet은 애플리케이션마다 하나의 인스턴스로 관리되고, 이 **하나의 인스턴스가 모든 요청**을 받는다.<br>
 **Thread-Safe**한 구조로, 여러 스레드에서 동시에 사용된다.<br>
 Tomcat과 Spring 애플리케이션 간의 징검다리 역할을 수행한다.
 
@@ -44,10 +44,12 @@ DispatcherServlet.service()
 `@RequestMapping` 기반의 어노테이션이 붙은 메서드를 탐색하여 요청을 처리할 컨트롤러(핸들러)를 결정한다.(*@GetMapping* 등)
 
 ### Handler Adapter
-컨트롤러의 메서드를 호출하여 요청을 처리하고, 그 결과로 View의 이름을 반환받는다.
+컨트롤러의 메서드를 호출하여 요청을 처리한 뒤 View의 이름을 반환받고 View Resolver에 전달한다.<br>
+REST 응답(RestController or @ResponseBody 메서드)의 경우 메서드의 반환 값을 받아 HTTP Body로 직렬화한다. 이때 ViewResolver 단계는 건너뛴다.
+
 
 ### View Resolver
-View의 이름 정보를 이용해서 실제 View를 랜더링하고, DispatcherServlet에 전달하여 클라이언트에게 응답한다.
+View의 이름 정보를 이용해서 실제 View 객체를 생성하고, DispatcherServlet에 전달하여 클라이언트에게 응답한다.
 
 ## 장점
 기존에는 API URL마다 Servlet Class를 별도로 생성해야 했다. 따라서 View를 호출하기 위한 Forwarding 코드가 중복되었으며, 컨트롤러의 공통적인 로직 처리가 어려웠다.<br>

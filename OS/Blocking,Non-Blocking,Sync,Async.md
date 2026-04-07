@@ -6,15 +6,21 @@
 
 <img width="407" height="180" alt="Image" src="https://github.com/user-attachments/assets/b7634b9a-d888-446d-b0c9-280257c6133c" />
 
-**블로킹:** I/O, 외부 API 호출 등 요청에 대한 결과를 응답받을 때까지 가만히 기다리는 상태(sleep)를 뜻한다.<br>
-**논블로킹:** 블로킹과 달리 요청에 대한 결과를 응답받을 때까지 '가만히 기다리지' 않는다.<br>
+
+**블로킹:** 작업 요청 시, 처리 결과를 응답받을 때까지 멈춘다.
+- 작업 결과 확인 시, 확인이 될때까지 제어권을 넘겨받지 못한다.
+
+**논블로킹:** 블로킹과 달리 요청에 대한 결과를 응답받을 때까지 '가만히 기다리지' 않는다.
+- 작업 결과 확인 시, 확인 여부와 상관없이 제어권을 넘겨받는다.
 
 ### Synchronous & Asynchronous
 
 <img width="326" height="301" alt="Image" src="https://github.com/user-attachments/assets/1835d8a2-1bc9-4a07-aad8-d09b82c47d66" />
 
-**동기:** 작업을 요청한 주체가 **작업 완료**를 기다린다.<br>
-**비동기:** 작업을 요청한 주체가 작업 완료를 기다리지 않고 **즉시 반환**된다. 완료 여부는 콜백/이벤트로 알 수 있다.<br>
+<img width="435" height="181" alt="Image" src="https://github.com/user-attachments/assets/11e9f265-5558-4593-b303-129b4ae75609" />
+
+**동기:** 호출자가 작업 완료를 확인해야 다음 작업을 진행할 수 있다.<br>
+**비동기:** 호출자가 작업 완료를 확인하지 않아도 다음 작업을 진행할 수 있다.<br>
 
 ## 조합
 
@@ -22,21 +28,135 @@
 
 `동기 + 블로킹`
 
-전통적인 방식이다. 스레드 하나가 작업의 요청과 완료를 책임지며, 블로킹 발생 시 대기한다.
+![Image](https://github.com/user-attachments/assets/f0766215-fe17-4aff-a01f-c649d2336210)
+
+- 작업 하나를 완료한 뒤, 그 다음 작업을 수행한다.
+- 작업 요청 시, 처리 결과를 응답받을 때까지 멈춘다.
 
 `동기 + 논블로킹`
 
-블로킹이 발생하지 않는 동기 방식이다. 대기 시간이 발생하는 작업을 만나는 경우 다른 작업을 수행할 수 있으나, 자신이 요청한 모든 작업에 대한 완료 여부를 계속해서 확인(*Polling*)해야하므로 효율적이지 않을 수 있다.
+![Image](https://github.com/user-attachments/assets/3a997d0c-1ed2-4302-91e3-c25034c3ee94)
+
+- 작업 하나를 완료한 뒤, 그 다음 작업을 수행한다.
+- 작업 요청 시, 처리 결과를 떠나 즉시 응답받는다.
+    - **polling**을 통해 주기적으로 결과를 확인한다.
+    - 따라서 polling 로직은 수행할 수 있다.
 
 `비동기 + 블로킹`
 
-작업을 요청한 스레드는 작업 완료를 기다리지 않고 즉시 반환된다. 이후 별도의 스레드가 이 작업을 처리하며, 여기에서의 작업에서는 블로킹이 발생할 수 있다.<br>
-비동기 처리 작업은 **별도의 스레드 풀**을 활용하여 처리하기에, 이 스레드 풀 크기에 비례하여 처리 능력이 결정된다.
-> **Spring**의 기본적인 비동기 처리(@Async)가 이 방식으로 수행된다. 
+![Image](https://github.com/user-attachments/assets/125b4c0f-4e0f-4073-a434-7e303fde4db2)
+
+- 작업이 완료되지 않아도 다음 작업을 바로 진행할 수 있다.
+- 작업 요청 시, 처리 결과를 응답받을 때까지 멈춘다.
+
+⇒ 두 개념은 서로 상충된다. 마치 ‘동기 + 블로킹’ 방식처럼 동작하며, 일반적으로 사용되지 않는다. 개발자의 실수로 인해 발생하는 패턴이라고 여겨지기도 한다.
 
 `비동기 + 논블로킹`
 
-작업을 요청한 스레드가 작업 완료를 기다리지 않으며, 작업 처리 도중 블로킹이 발생하지 않는 처리 방식이다. 주어진 자원으로 가장 높은 처리량을 달성할 수 있는 이상적인 방식이나, 디버깅과 테스트가 어렵고 복잡도가 증가한다는 점이 있다.
+![Image](https://github.com/user-attachments/assets/290a925b-b1dd-4d35-8f2e-583d606ba9f6)
+
+# 동기/비동기/블로킹/논블로킹
+
+# 동기/비동기
+
+![image.png](attachment:8adaccea-d060-4efa-ac13-b8e6652455e2:image.png)
+
+![image.png](attachment:c37c5448-44da-4c20-8c1f-d0f7999a2af1:image.png)
+
+- 동기: 호출자가 작업 완료를 확인해야 다음 작업을 진행할 수 있다.
+- 비동기: 호출자가 작업 완료를 확인하지 않아도 다음 작업을 진행할 수 있다.
+
+# 블로킹/논블로킹
+
+![image.png](attachment:c1c9eb34-d156-4d42-b2f3-2856c0a7ba55:image.png)
+
+- 블로킹: 작업 요청 시, 처리 결과를 응답받을 때까지 멈춘다.
+    - 작업 결과 확인 시, 확인이 될때까지 제어권을 넘겨받지 못한다.
+- 논블로킹: 작업 요청 시, 처리 결과를 떠나 즉시 응답받는다.
+    - 작업 결과 확인 시, 확인 여부와 상관없이 제어권을 넘겨받는다.
+
+# 가능한 조합
+
+**동기 + 블로킹**
+
+```mermaid
+sequenceDiagram
+    participant Caller as 호출자
+    participant Task as 작업
+
+    Caller->>Task: 작업 요청
+    Note over Caller: 대기 / 멈춤
+    Task-->>Caller: 결과 반환
+    Note over Caller: 다음 작업 진행
+```
+
+- 작업 하나를 완료한 뒤, 그 다음 작업을 수행한다.
+- 작업 요청 시, 처리 결과를 응답받을 때까지 멈춘다.
+
+**동기 + 논블로킹**
+
+```mermaid
+sequenceDiagram
+    participant Caller as 호출자
+    participant Task as 작업
+
+    Caller->>Task: 작업 요청
+    Task-->>Caller: 즉시 반환(미완료)
+
+    loop polling
+        Caller->>Task: 완료 여부 확인
+        Task-->>Caller: 미완료 또는 완료
+    end
+
+    Note over Caller: 완료되면 호출자가 직접 결과 사용
+```
+
+- 작업 하나를 완료한 뒤, 그 다음 작업을 수행한다.
+- 작업 요청 시, 처리 결과를 떠나 즉시 응답받는다.
+    - **polling**을 통해 주기적으로 결과를 확인한다.
+    - 따라서 polling 로직은 수행할 수 있다.
+
+***비동기 + 블로킹***
+
+```mermaid
+sequenceDiagram
+    participant Caller as 호출자
+    participant Task as 작업
+
+    Caller->>Task: 비동기 작업 요청
+    Note over Caller: 대기 / 멈춤
+
+    Note over Task: 실제 작업은 비동기적으로 진행
+    Task-->>Caller: CallBack: 완료 이벤트 / 결과 통지
+    Note over Caller: 다음 작업 진행
+```
+
+- 작업이 완료되지 않아도 다음 작업을 바로 진행할 수 있다.
+- 작업 요청 시, 처리 결과를 응답받을 때까지 멈춘다.
+
+⇒ 두 개념은 서로 상충되며, 동시에 존재하는 것이 어딘가 어색하다. 마치 ‘동기 + 블로킹’ 방식처럼 동작하게 된다.
+
+**비동기 + 논블로킹**
+
+```mermaid
+sequenceDiagram
+    participant Caller as 호출자
+    participant Task as 작업
+    participant Handler as 콜백/이벤트 처리기
+
+    Caller->>Task: 비동기 작업 시작
+    Task-->>Caller: 즉시 반환
+    Note over Caller: 계속 다른 작업 수행
+
+    Task-->>Handler: 완료 통지
+    Note over Handler: 콜백 / 이벤트 / completion 실행
+```
+
+- 작업이 완료되지 않아도 다음 작업을 바로 진행할 수 있다.
+- 작업 요청 시, 처리 결과를 떠나 즉시 응답받는다.
+    - 각 작업이 완료될 때 콜백/이벤트 드리븐 등으로 제 3자가 이후 로직을 처리한다.
+    - 제 3자는 원래 로직을 수행하던 스레드가 될 수도, 아예 별도의 스레드가 될 수도 있다.
+    - 이 콜백을 별도의 스레드가 수행하는 경우, 호출(origin) 스레드의 thread-local을 사용할 수 없다.
 
 
 ---

@@ -22,58 +22,6 @@
 **동기:** 호출자가 작업 완료를 확인해야 다음 작업을 진행할 수 있다.<br>
 **비동기:** 호출자가 작업 완료를 확인하지 않아도 다음 작업을 진행할 수 있다.<br>
 
-## 조합
-
-<img width="1292" height="772" alt="Image" src="https://github.com/user-attachments/assets/ced4c466-a6fc-4670-af35-768af5d477bb" />
-
-`동기 + 블로킹`
-
-![Image](https://github.com/user-attachments/assets/f0766215-fe17-4aff-a01f-c649d2336210)
-
-- 작업 하나를 완료한 뒤, 그 다음 작업을 수행한다.
-- 작업 요청 시, 처리 결과를 응답받을 때까지 멈춘다.
-
-`동기 + 논블로킹`
-
-![Image](https://github.com/user-attachments/assets/3a997d0c-1ed2-4302-91e3-c25034c3ee94)
-
-- 작업 하나를 완료한 뒤, 그 다음 작업을 수행한다.
-- 작업 요청 시, 처리 결과를 떠나 즉시 응답받는다.
-    - **polling**을 통해 주기적으로 결과를 확인한다.
-    - 따라서 polling 로직은 수행할 수 있다.
-
-`비동기 + 블로킹`
-
-![Image](https://github.com/user-attachments/assets/125b4c0f-4e0f-4073-a434-7e303fde4db2)
-
-- 작업이 완료되지 않아도 다음 작업을 바로 진행할 수 있다.
-- 작업 요청 시, 처리 결과를 응답받을 때까지 멈춘다.
-
-⇒ 두 개념은 서로 상충된다. 마치 ‘동기 + 블로킹’ 방식처럼 동작하며, 일반적으로 사용되지 않는다. 개발자의 실수로 인해 발생하는 패턴이라고 여겨지기도 한다.
-
-`비동기 + 논블로킹`
-
-![Image](https://github.com/user-attachments/assets/290a925b-b1dd-4d35-8f2e-583d606ba9f6)
-
-# 동기/비동기/블로킹/논블로킹
-
-# 동기/비동기
-
-![image.png](attachment:8adaccea-d060-4efa-ac13-b8e6652455e2:image.png)
-
-![image.png](attachment:c37c5448-44da-4c20-8c1f-d0f7999a2af1:image.png)
-
-- 동기: 호출자가 작업 완료를 확인해야 다음 작업을 진행할 수 있다.
-- 비동기: 호출자가 작업 완료를 확인하지 않아도 다음 작업을 진행할 수 있다.
-
-# 블로킹/논블로킹
-
-![image.png](attachment:c1c9eb34-d156-4d42-b2f3-2856c0a7ba55:image.png)
-
-- 블로킹: 작업 요청 시, 처리 결과를 응답받을 때까지 멈춘다.
-    - 작업 결과 확인 시, 확인이 될때까지 제어권을 넘겨받지 못한다.
-- 논블로킹: 작업 요청 시, 처리 결과를 떠나 즉시 응답받는다.
-    - 작업 결과 확인 시, 확인 여부와 상관없이 제어권을 넘겨받는다.
 
 # 가능한 조합
 

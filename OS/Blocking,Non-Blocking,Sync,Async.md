@@ -25,6 +25,8 @@
 
 ## 가능한 조합
 
+<img width="1292" height="772" alt="Image" src="https://github.com/user-attachments/assets/ced4c466-a6fc-4670-af35-768af5d477bb" />
+
 ### 동기 + 블로킹
 
 ```mermaid
